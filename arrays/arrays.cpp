@@ -14,8 +14,9 @@ int main()
 {
     const int maxNumberValue = 1000;
     const int midNumberValue = 500;
-    const int arraySize = 20;
+    const int arraySize = 12;
     int intArray[arraySize] = { 0 };	// Initialize to 0.
+    int tmpArray[arraySize] = { 0 };    // tmp array for non-recursive merge sort.
     int tmp;
 
     long int randNum = 0;
@@ -80,13 +81,14 @@ int main()
 
 
     /*******************************************************/
-    // Merge sort
+    // Recursive Merge sort
     // 33333333333333333333333333333333333
     // This instance is for debug and understanding
     // all cases order = O(n*log n) n = number of elements
     // space complexity = O(2n). Slightly more than 1 due to storing key.
+    // Fixed array size and known values were used to understand how it worked.
     /*******************************************************/
-    ac.fillArrayRand(intArray, arraySize, maxNumberValue);
+    //ac.fillArrayRand(intArray, arraySize, maxNumberValue);
     int intArrayFixed[arraySize] = {4, 82, 16, 3, 1, 90, 23, 49, 2, 19};
     ac.printArray(intArrayFixed, 10);
 
@@ -96,16 +98,20 @@ int main()
 
     /*******************************************************/
     // Merge sort
-    // 33333333333333333333333333333333333
+    // non-recursive algorithm
+    // 44444444444444444444444444444444444444444
     // all cases order = O(n*log n) n = number of elements
     // space complexity = O(2n). Slightly more than 1 due to storing key.
     /*******************************************************/
-    ac.fillArrayRand(intArray, arraySize, maxNumberValue);
-    ac.printArray(intArray, arraySize);
+    int intArrayFixed_02[10] = { 4, 82, 16, 3, 1, 90, 23, 49, 2, 19 };
+    int tmpArrayFixed[10] = { 0 };
+    ac.printArray(intArrayFixed_02, 10);
+    ac.printArray(tmpArray, 10);
 
-    ac.mergeSort(intArray, 0, arraySize - 1);
+    ac.iterativeMergeSort(intArrayFixed_02, tmpArray, 10);
 
-    ac.printArray(intArray, arraySize);
+    ac.printArray(intArrayFixed_02, 10);
+    ac.printArray(tmpArray, 10);
 
     /*******************************************************/
     // Quick sort
