@@ -7,14 +7,15 @@
 #include "ArrayClass.h"
 
 
+
+
 // main is the test bed for the arrays created in the classes.
 int main()
 {
     const int maxNumberValue = 1000;
     const int midNumberValue = 500;
-    const int arraySize = 10;
-    int intArray[arraySize] = { 0 };	// array of 100 integers. Initialize to 0.
-    //int intArraySort[arraySize] = { 0 };  // an array for performing sorting
+    const int arraySize = 20;
+    int intArray[arraySize] = { 0 };	// Initialize to 0.
     int tmp;
 
     long int randNum = 0;
@@ -22,9 +23,16 @@ int main()
     ArrayClass ac;
 
     
-
+    /*******************************************************/
     // Bubble sort
     // 1111111111111111111111111
+    // The inner loop traverses from the point in the array where the outer loop points.
+    // If the number pointed to by the inner loop is less than the number pointed to by the
+    // outer loop, then the less number is put where the outer loop is pointing. The numbers
+    // are sorted from lowest to highest iaw where the outer loop is pointing.
+    // best case order = O(n^2) n = number of elements
+    // worst case order = O(n)
+    // space complexity = O(1). Just the size of the array.
     /*******************************************************/
     //// print out array prior to sort
     ac.fillArrayRand(intArray, arraySize, maxNumberValue);
@@ -45,20 +53,28 @@ int main()
     /*******************************************************/
     // Insertion sort
     // 22222222222222222222222222222222
+    // Key scans up the array from 0 to maxNumberValue. j scans
+    // down the array from the position 1 less than the key. If the
+    // key is less than any value pointed to by j, then the number(s)
+    // in the array are right-shifted and the key placed in the position
+    // where it is the smallest.
+    // best case order = O(n^2) n = number of elements
+    // worst case order = O(n)
+    // space complexity = ~O(1). Slightly more than 1 due to storing key.
     /*******************************************************/
     ac.fillArrayRand(intArray, arraySize, maxNumberValue);
     ac.printArray(intArray, arraySize);
 
-    //for (int i = 1; i < arraySize; i++) {
-    //    int key = intArray[i];
-    //    int j = i - 1; 
-    //    while (j >= 0 && arraySize[j] > key) {
-    //        arraySize[j + 1] = intArray[j];
-    //        j--;
-    //    }
+    for (int i = 1; i < arraySize; i++) {
+        int key = intArray[i];
+        int j = i - 1; 
+        while (j >= 0 && intArray[j] > key) {
+            intArray[j + 1] = intArray[j];
+            j--;
+        }
 
-    //    arraySize[j + 1] = key;
-    //}
+        intArray[j + 1] = key;
+    }
 
     ac.printArray(intArray, arraySize);
 
@@ -66,10 +82,28 @@ int main()
     /*******************************************************/
     // Merge sort
     // 33333333333333333333333333333333333
+    // This instance is for debug and understanding
+    // all cases order = O(n*log n) n = number of elements
+    // space complexity = O(2n). Slightly more than 1 due to storing key.
+    /*******************************************************/
+    ac.fillArrayRand(intArray, arraySize, maxNumberValue);
+    int intArrayFixed[arraySize] = {4, 82, 16, 3, 1, 90, 23, 49, 2, 19};
+    ac.printArray(intArrayFixed, 10);
+
+    ac.mergeSort(intArrayFixed, 0, 9);
+
+    ac.printArray(intArrayFixed, 10);
+
+    /*******************************************************/
+    // Merge sort
+    // 33333333333333333333333333333333333
+    // all cases order = O(n*log n) n = number of elements
+    // space complexity = O(2n). Slightly more than 1 due to storing key.
     /*******************************************************/
     ac.fillArrayRand(intArray, arraySize, maxNumberValue);
     ac.printArray(intArray, arraySize);
 
+    ac.mergeSort(intArray, 0, arraySize - 1);
 
     ac.printArray(intArray, arraySize);
 
