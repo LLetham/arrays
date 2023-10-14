@@ -12,11 +12,12 @@ class ArrayClass
 
 private:
 	//int x, y, z;
-    int arraySize = 10;
+    //int arraySize = 10;
     int callNumber = 0;
-    int right, wid, rend;
-    int m, t;
-    int n, x;
+    //int right, wid, rend;
+    //int m, t;
+    //int n;
+    int x;
     int passNumber;  // the number of passes to merge sort an array
     int low;        // the low eleement of a list for merge sort
     int mid;        // the mid element of a list for merge sort
@@ -38,6 +39,15 @@ public:
 		}
 		std::cout << std::endl;
 	}
+
+    /******************************************/
+    // Verify that the array is in ascending order
+    void verifyArray(int* array, int arraySize) {
+        for (int k = 0; k < arraySize - 1; k++) {
+            if (array[k] > array[k + 1])
+                std::cout << "elements [" << k << "] and [" << k + 1 << "] not in ascending order" << std::endl;
+        }
+    }
 
     /******************************************/
     // print out array between start and end
@@ -75,6 +85,31 @@ public:
     void zeroOut(int *array, int arraySize) {
         for (int i = 0; i < arraySize; i++)
             array[i] = 0;
+    }
+
+    /******************************************/
+    // Fill array with random numbers less than maxNumberValue
+    // when the program runs without pauses, such as in debug, the program runs so fast
+    // that the time() function does not change and the numbers are the same for each loop.
+    // The seedAdditive adds a changing factor to time() to try to get different numbers.
+    void fillArrayRand(int* array, int arraySize, const int maxNumberValue, int seedAdditive) {
+
+        std::srand(long int(time(0) + seedAdditive));    // seed the random number generator with the time of day
+
+        // fill the array with random numbers in valoe from 0 to 999
+        for (int i = 0; i < arraySize; i++) {
+
+            // rand gets a random number. 
+            // Modulo maxNumberValue to keep values less than maxNumberValue
+            array[i] = std::rand() % maxNumberValue;
+        }
+
+        // verify no value in intArray is greater than maxNumberValue
+        for (int i = 0; i < arraySize; i++) {
+            if (array[i] > maxNumberValue) {
+                std::cout << "array[" << i << "]: " << array[i] << "\t Greater than\t" << maxNumberValue << std::endl;
+            }
+        }
     }
 
     /******************************************/
@@ -197,7 +232,7 @@ public:
         merge(array, begin, mid, end);
 #if SHOW_array
         printArray(array, begin, end);
-        printArray(array, 0, arraySize);
+        printArray(array, 0, end);
         std::cout << std::endl;
 #endif
 #if UNDERSTAND_stack
@@ -233,21 +268,15 @@ public:
                 high = x + (passNumber - 1);
                 mid = (low + high) / 2;
                 mergeArrays(intArray, tmpArray, low, mid, high);
-                printArray(intArray, 10);
-                //printArray(tmpArray, 10);
-
             }
         }
 
         // Merge any odd, not power of 2 blocks of elements
         if ((passNumber / 2) < numElements) {
-            mid = passNumber / 2;
+            mid = (passNumber / 2) - 1;
             high = numElements - 1;
             mergeArrays(intArray, tmpArray, 0, mid, high);
         }
-        printArray(intArray, 10);
-        //printArray(tmpArray, 10);
-
     }
 
     /***********************************************************/
@@ -268,11 +297,7 @@ public:
                 k++;
                 j++;
             }
-            printArray(intArray, 10);
-            printArray(tmpArray, 10);
         }
-        printArray(intArray, 10);
-        printArray(tmpArray, 10);
 
         // end of mid to high reached, so copy the reminder of low to mid
         // into tmpArray.
@@ -280,8 +305,6 @@ public:
             tmpArray[k] = intArray[i];
             k++;
         }
-        printArray(intArray, 10);
-        printArray(tmpArray, 10);
 
         // end of low to mid reached, so copy the reminder of mid to high 
         // into tmpArray.
@@ -289,110 +312,13 @@ public:
             tmpArray[k] = intArray[j];
             k++;
         }
-        printArray(intArray, 10);
-        printArray(tmpArray, 10);
 
         // copy tmpArray back into intArray
         for (i = low; i <= high; i++) {
             intArray[i] = tmpArray[i];
         }
-        printArray(intArray, 10);
-        printArray(tmpArray, 10);
 
     }
-
-    ///************************************************************/
-    //// Non-recursive algorithm.
-    //// I got the original code from stackoverflow.com 
-    //// https://stackoverflow.com/questions/1557894/non-recursive-merge-sort
-    //// However, Baeldung was very useful in understanding how it works.
-    //// https://www.baeldung.com/cs/non-recursive-merge-sort
-    ///*******************************************************************/
-    //void mergeSortn(int *intArray, int *tmpArray, int beginArray, int endArray)
-    //{
-    //    printArray(intArray, 0, endArray);
-    //    printArray(tmpArray, 0, endArray);
-
-    //    for (int k = 1; k < endArray; k *= 2) {
-    //        for (int left = 0; left + k < endArray; left += k * 2) {
-    //            right = left + k;
-    //            rend = right + k;
-    //            if (rend > endArray) rend = endArray;
-    //            m = left; 
-    //            i = left; 
-    //            j = right;
-
-    //            std::cout << "i:\t" << i << "\tm:\t" << m << "\tj:\t" << j << std::endl;
-    //            std::cout << "l:\t" << left << "\tk:\t" << k << "\tr:\t" << right << std::endl;
-
-    //            while (i < right && j < rend) {
-    //                if (intArray[i] <= intArray[j]) {
-    //                    tmpArray[m] = intArray[i];
-    //                    i++;
-    //                }
-    //                else {
-    //                    tmpArray[m] = intArray[j];
-    //                    j++;
-    //                }
-    //                m++;
-    //                std::cout << "i:\t" << i << "\tm:\t" << m << "\tj:\t" << j << std::endl;
-    //                std::cout << "l:\t" << left << "\tk:\t" << k << "\tr:\t" << right << std::endl;
-
-    //                printArray(intArray, 0, endArray);
-    //                printArray(tmpArray, 0, endArray);
-
-    //            }
-
-    //            while (i < right) {
-    //                tmpArray[m] = intArray[i];
-    //                i++; 
-    //                m++;
-    //                printArray(intArray, 0, endArray);
-    //                printArray(tmpArray, 0, endArray);
-
-    //            }
-    //            std::cout << "i:\t" << i << "\tm:\t" << m << "\tj:\t" << j << std::endl;
-    //            std::cout << "l:\t" << left << "\tk:\t" << k << "\tr:\t" << right << std::endl;
-
-    //            while (j < rend) {
-    //                tmpArray[m] = intArray[j];
-    //                j++; 
-    //                m++;
-    //                printArray(intArray, 0, endArray);
-    //                printArray(tmpArray, 0, endArray);
-
-    //            }
-    //            std::cout << "i:\t" << i << "\tm:\t" << m << "\tj:\t" << j << std::endl;
-    //            std::cout << "l:\t" << left << "\tk:\t" << k << "\tr:\t" << right << std::endl;
-
-    //            for (m = left; m < rend; m++) {
-    //                intArray[m] = tmpArray[m];
-    //            }
-    //            std::cout << "i:\t" << i << "\tm:\t" << m << "\tj:\t" << j << std::endl;
-    //            std::cout << "l:\t" << left << "\tk:\t" << k << "\tr:\t" << right << std::endl;
-
-    //            printArray(intArray, 0, endArray);
-    //            printArray(tmpArray, 0, endArray);
-
-    //        }
-    //    }
-    //}
-
-
-    /************************************************************/
-    // Non-recursive algorithm.
-    // I got the original code from Baeldung. 
-    // https://www.baeldung.com/cs/non-recursive-merge-sort
-    /*******************************************************************/
-    //int l1; // start of first part
-    //int r1; // end of first part.
-    //int l2; // start of second part.
-    //int r2; // end of second part
-
-
-    //void mergeSortn(int* intArray, int* tmpArray, int beginArray, int endArray) {
-
-    //}
 
 
 };
