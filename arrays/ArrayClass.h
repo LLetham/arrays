@@ -33,7 +33,7 @@ public:
     // print out array starting at element zero
 	void printArray(int* array, int arraySize) {
 
-		std::cout << "array:\t";
+		std::cout << "a: ";
 		for (int k = 0; k < arraySize; k++) {
 			std::cout << array[k] << "\t";
 		}
@@ -268,15 +268,25 @@ public:
                 high = x + (passNumber - 1);
                 mid = (low + high) / 2;
                 mergeArrays(intArray, tmpArray, low, mid, high);
+                printArray(intArray, numElements);
+                printArray(tmpArray, numElements);
             }
+            printArray(intArray, numElements);
+            printArray(tmpArray, numElements);
         }
+        printArray(intArray, numElements);
+        printArray(tmpArray, numElements);
 
         // Merge any odd, not power of 2 blocks of elements
         if ((passNumber / 2) < numElements) {
             mid = (passNumber / 2) - 1;
             high = numElements - 1;
             mergeArrays(intArray, tmpArray, 0, mid, high);
+            printArray(intArray, numElements);
+            printArray(tmpArray, numElements);
         }
+        printArray(intArray, numElements);
+        printArray(tmpArray, numElements);
     }
 
     /***********************************************************/

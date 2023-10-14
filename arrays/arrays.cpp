@@ -12,9 +12,9 @@
 // main is the test bed for the arrays created in the classes.
 int main()
 {
-    const int maxNumberValue = 1000;
+    const int maxNumberValue = 10000;
     const int midNumberValue = 500;
-    const int arraySize = 23;
+    const int arraySize = 21;
     int intArray[arraySize] = { 0 };	// Initialize to 0.
     int tmpArray[arraySize] = { 0 };    // tmp array for non-recursive merge sort.
     int tmp;
@@ -119,12 +119,31 @@ int main()
 
     /*******************************************************/
     // Merge sort
+    // Fix array size and values to debug
+    // non-recursive algorithm
+    // 44444444444444444.0000000000000000000000000000
+   /*******************************************************/
+    std::cout << "Start of iterative merge sort fix array" << std::endl;
+    int intArrayFixed_02[21] = { 34, 49, 16,  6,
+                                 77, 95, 82, 31,
+                                 18, 19, 49, 29,
+                                 74,  3, 47,  2,
+                                 23,  8, 57,  4,
+                                 10 };
+    ac.zeroOut(tmpArray, 21);
+    ac.printArray(intArrayFixed_02, 21);
+
+    ac.iterativeMergeSort(intArrayFixed_02, tmpArray, 21);
+
+    ac.printArray(intArrayFixed_02, 21);
+    ac.verifyArray(intArrayFixed_02, 21);
+
+    /*******************************************************/
+    // Merge sort
     // non-recursive algorithm
     // 44444444444444444444444444444444444444444
     // all cases order = O(n*log n) n = number of elements
     // Fixed array size and known values were used to understand how it worked.
-    // here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // this algorithm has issues.
    /*******************************************************/
     std::cout << "Start of iterative merge sort" << std::endl;
     for (loop = 0; loop < maxLoop; loop++) {
