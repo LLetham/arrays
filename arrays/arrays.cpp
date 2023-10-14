@@ -103,7 +103,7 @@ int main()
     // all cases order = O(n*log n) n = number of elements
     // space complexity = O(2n). Slightly more than 1 due to storing key.
     /*******************************************************/
-    int intArrayFixed_02[10] = { 4, 82, 16, 3, 1, 90, 23, 49, 2, 19 };
+    int intArrayFixed_02[10] = { 4, 82, 16, 3, 90, 1, 23, 49, 19, 2 };
     int tmpArrayFixed[10] = { 0 };
     ac.printArray(intArrayFixed_02, 10);
     ac.printArray(tmpArray, 10);

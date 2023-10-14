@@ -234,21 +234,24 @@ public:
                 mid = (low + high) / 2;
                 mergeArrays(intArray, tmpArray, low, mid, high);
                 printArray(intArray, 10);
-                printArray(tmpArray, 10);
+                //printArray(tmpArray, 10);
 
             }
         }
 
-        // Merge any odd, non-power of 2 elements
+        // Merge any odd, not power of 2 blocks of elements
         if ((passNumber / 2) < numElements) {
             mid = passNumber / 2;
             high = numElements - 1;
             mergeArrays(intArray, tmpArray, 0, mid, high);
         }
+        printArray(intArray, 10);
+        //printArray(tmpArray, 10);
 
     }
 
-    // Merge two list in a single array
+    /***********************************************************/
+    // Merge two lists in a single array
     void mergeArrays(int* intArray, int* tmpArray, int low, int mid, int high) {
         i = low;
         j = mid + 1;
@@ -265,22 +268,36 @@ public:
                 k++;
                 j++;
             }
+            printArray(intArray, 10);
+            printArray(tmpArray, 10);
         }
+        printArray(intArray, 10);
+        printArray(tmpArray, 10);
 
+        // end of mid to high reached, so copy the reminder of low to mid
+        // into tmpArray.
         for (; i <= mid; i++) {
             tmpArray[k] = intArray[i];
             k++;
         }
+        printArray(intArray, 10);
+        printArray(tmpArray, 10);
 
+        // end of low to mid reached, so copy the reminder of mid to high 
+        // into tmpArray.
         for (; j <= high; j++) {
             tmpArray[k] = intArray[j];
             k++;
         }
+        printArray(intArray, 10);
+        printArray(tmpArray, 10);
 
         // copy tmpArray back into intArray
         for (i = low; i <= high; i++) {
             intArray[i] = tmpArray[i];
         }
+        printArray(intArray, 10);
+        printArray(tmpArray, 10);
 
     }
 
