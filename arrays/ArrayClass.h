@@ -262,31 +262,48 @@ public:
         // power of 2 merge: 2 elements, 4 elements, 8 elements, etc.
         for (passNumber = 2; passNumber <= numElements; passNumber = passNumber * 2) {
 
+            //std::cout << "\npassNumber =\t" << passNumber << std::endl;
+
             // merging lists. Lower list from low to mid. Upper list from mid to high.
-            for (x = 0; x + passNumber - 1 < numElements; x = x + passNumber) {
+            for (x = 0; x + (passNumber - 1) < numElements; x = x + passNumber) {
                 low = x;
                 high = x + (passNumber - 1);
                 mid = (low + high) / 2;
-                mergeArrays(intArray, tmpArray, low, mid, high);
-                printArray(intArray, numElements);
-                printArray(tmpArray, numElements);
-            }
-            printArray(intArray, numElements);
-            printArray(tmpArray, numElements);
-        }
-        printArray(intArray, numElements);
-        printArray(tmpArray, numElements);
 
-        // Merge any odd, not power of 2 blocks of elements
-        if ((passNumber / 2) < numElements) {
-            mid = (passNumber / 2) - 1;
-            high = numElements - 1;
-            mergeArrays(intArray, tmpArray, 0, mid, high);
-            printArray(intArray, numElements);
-            printArray(tmpArray, numElements);
+                //std::cout << "x:\t" << x << "\tlow mid high:\t" << low << "\t " << mid << "\t" << high << std::endl;
+
+                zeroOut(tmpArray, numElements);
+                mergeArrays(intArray, tmpArray, low, mid, high);
+                //printArray(intArray, numElements);
+                //printArray(tmpArray, numElements);
+            }
+
+            // Merge any odd, not power of 2 blocks of elements
+            if (x < numElements) {
+                low = x - passNumber;
+                mid = x - 1;
+                high = numElements - 1;
+                mergeArrays(intArray, tmpArray, low, mid, high);
+                //printArray(intArray, numElements);
+                //printArray(tmpArray, numElements);
+            }
+
+            //printArray(intArray, numElements);
+            //printArray(tmpArray, numElements);
         }
-        printArray(intArray, numElements);
-        printArray(tmpArray, numElements);
+        //printArray(intArray, numElements);
+        //printArray(tmpArray, numElements);
+
+        //// Merge any odd, not power of 2 blocks of elements
+        //if ((passNumber / 2) < numElements) {
+        //    mid = (passNumber / 2) - 1;
+        //    high = numElements - 1;
+        //    mergeArrays(intArray, tmpArray, 0, mid, high);
+        //    printArray(intArray, numElements);
+        //    printArray(tmpArray, numElements);
+        //}
+        //printArray(intArray, numElements);
+        //printArray(tmpArray, numElements);
     }
 
     /***********************************************************/
@@ -297,6 +314,8 @@ public:
         k = low;
 
         while (i <= mid && j <= high) {
+            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
+            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             if (intArray[i] < intArray[j]) {
                 tmpArray[k] = intArray[i];
                 k++;
@@ -312,6 +331,8 @@ public:
         // end of mid to high reached, so copy the reminder of low to mid
         // into tmpArray.
         for (; i <= mid; i++) {
+            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
+            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             tmpArray[k] = intArray[i];
             k++;
         }
@@ -319,12 +340,16 @@ public:
         // end of low to mid reached, so copy the reminder of mid to high 
         // into tmpArray.
         for (; j <= high; j++) {
+            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
+            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             tmpArray[k] = intArray[j];
             k++;
         }
 
         // copy tmpArray back into intArray
         for (i = low; i <= high; i++) {
+            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
+            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             intArray[i] = tmpArray[i];
         }
 

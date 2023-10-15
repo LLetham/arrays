@@ -141,9 +141,8 @@ int main()
     /*******************************************************/
     // Merge sort
     // non-recursive algorithm
-    // 44444444444444444444444444444444444444444
+    // 4444444444444444.1111111111111111111111111111111111111
     // all cases order = O(n*log n) n = number of elements
-    // Fixed array size and known values were used to understand how it worked.
    /*******************************************************/
     std::cout << "Start of iterative merge sort" << std::endl;
     for (loop = 0; loop < maxLoop; loop++) {
