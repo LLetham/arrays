@@ -18,7 +18,7 @@ private:
     //int m, t;
     //int n;
     int x;
-    int passNumber;  // the number of passes to merge sort an array
+    int bitsToMerge;  // the number of bits to merge sort an array
     int low;        // the low eleement of a list for merge sort
     int mid;        // the mid element of a list for merge sort
     int high;       // the high element of a list for merge sort
@@ -30,7 +30,7 @@ private:
 
 public:
 	/******************************************/
-    // print out array starting at element zero
+    // print out elements of an array in a line starting at element zero
 	void printArray(int* array, int arraySize) {
 
 		std::cout << "a: ";
@@ -41,7 +41,8 @@ public:
 	}
 
     /******************************************/
-    // Verify that the array is in ascending order
+    // Verify that the array is in ascending order, meaning each element from 0 has a higher value.
+    // LL: this could be improved by throwing an exception rather than using cout
     void verifyArray(int* array, int arraySize) {
         for (int k = 0; k < arraySize - 1; k++) {
             if (array[k] > array[k + 1])
@@ -50,7 +51,8 @@ public:
     }
 
     /******************************************/
-    // print out array between start and end
+    // print out array between start and end. This prints a portion of an array.
+    // Used for debug.
     void printArray(int* array, int start, int end) {
 
         std::cout << "array[" << start <<"] to [" << end << "]:""\t";
@@ -60,41 +62,23 @@ public:
         std::cout << std::endl;
     }
 
-    /******************************************/
-	// Fill array with random numbers less than maxNumberValue
-	void fillArrayRand(int* array, int arraySize, const int maxNumberValue) {
-
-		std::srand(long int(time(0)));    // seed the random number generator with the time of day
-
-		// fill the array with random numbers in valoe from 0 to 999
-		for (int i = 0; i < arraySize; i++) {
-
-			// rand gets a random number. 
-			// Modulo maxNumberValue to keep values less than maxNumberValue
-			array[i] = std::rand() % maxNumberValue;
-		}
-
-		// verify no value in intArray is greater than maxNumberValue
-		for (int i = 0; i < arraySize; i++) {
-			if (array[i] > maxNumberValue) {
-				std::cout << "array[" << i << "]: " << array[i] << "\t Greater than\t" << maxNumberValue << std::endl;
-			}
-		}
-	}
-
+    /*************************************************/
+    // Makes the value of all elements of an array zero.
     void zeroOut(int *array, int arraySize) {
         for (int i = 0; i < arraySize; i++)
             array[i] = 0;
     }
 
     /******************************************/
-    // Fill array with random numbers less than maxNumberValue
-    // when the program runs without pauses, such as in debug, the program runs so fast
-    // that the time() function does not change and the numbers are the same for each loop.
-    // The seedAdditive adds a changing factor to time() to try to get different numbers.
-    void fillArrayRand(int* array, int arraySize, const int maxNumberValue, int seedAdditive) {
+    // Fill array with random numbers less than maxNumberValue. 
+    // The random numbers are not in order and are sorted.
+    void fillArrayRand(int* array, int arraySize, const int maxNumberValue) {
 
-        std::srand(long int(time(0) + seedAdditive));    // seed the random number generator with the time of day
+        // LL: need to figure out how to seed the random number generator to
+        // generate different random numbers when not running in debug mode.
+        // See next version with seedAdditive value as a work around.
+
+        std::srand(long int(time(NULL)));    // seed the random number generator with the time of day
 
         // fill the array with random numbers in valoe from 0 to 999
         for (int i = 0; i < arraySize; i++) {
@@ -103,12 +87,23 @@ public:
             // Modulo maxNumberValue to keep values less than maxNumberValue
             array[i] = std::rand() % maxNumberValue;
         }
+    }
 
-        // verify no value in intArray is greater than maxNumberValue
+    /******************************************/
+    // Fill array with random numbers less than maxNumberValue
+    // When the program runs without pauses, such as not in debug, the program runs so fast
+    // that the value from the time() function does not change and the numbers are the same for each loop.
+    // The seedAdditive adds a  factor that changes each call to time() to get different randome numbers.
+    void fillArrayRand(int* array, int arraySize, const int maxNumberValue, int seedAdditive) {
+
+        std::srand(long int(time(NULL) + seedAdditive));    // seed the random number generator with the time of day
+
+        // fill the array with random numbers in valoe from 0 to 999
         for (int i = 0; i < arraySize; i++) {
-            if (array[i] > maxNumberValue) {
-                std::cout << "array[" << i << "]: " << array[i] << "\t Greater than\t" << maxNumberValue << std::endl;
-            }
+
+            // rand gets a random number. 
+            // Modulo maxNumberValue to keep values less than maxNumberValue
+            array[i] = std::rand() % maxNumberValue;
         }
     }
 
@@ -116,6 +111,9 @@ public:
     // Merges two subarrays of array[]. 
     // First subarray is arr[begin..mid] 
     // Second subarray is arr[mid+1..end] 
+    // This is used with the iterative merge sort.
+    // LL: This is different from the merge for the interative
+    // merge sort in that a temperatory array is not used.
     void merge(int array[], int const left, int const mid, int const right)
     {
         auto const subArrayOne = mid - left + 1;
@@ -244,7 +242,7 @@ public:
 
 
     /************************************************************/
-    // Based on video by Abdul Bari
+    // Based on video by Abdul Bari udemy.com class
     // Each element of the array is considered a sorted list.
     // The sorted lists need to be merged.
     // original array: 4, 82, 16, 3, 1,   90, 23, 49, 2, 19   each element is a separate list
@@ -260,67 +258,55 @@ public:
     void iterativeMergeSort(int* intArray, int* tmpArray, int numElements) {
 
         // power of 2 merge: 2 elements, 4 elements, 8 elements, etc.
-        for (passNumber = 2; passNumber <= numElements; passNumber = passNumber * 2) {
+        for (bitsToMerge = 2; bitsToMerge <= numElements; bitsToMerge = bitsToMerge * 2) {
 
-            //std::cout << "\npassNumber =\t" << passNumber << std::endl;
-
-            // merging lists. Lower list from low to mid. Upper list from mid to high.
-            for (x = 0; x + (passNumber - 1) < numElements; x = x + passNumber) {
+            // merging lists. Lower list from low to mid. Upper list from (mid + 1) to high.
+            for (x = 0; x + (bitsToMerge - 1) < numElements; x = x + bitsToMerge) {
                 low = x;
-                high = x + (passNumber - 1);
+                high = x + (bitsToMerge - 1);
                 mid = (low + high) / 2;
 
-                //std::cout << "x:\t" << x << "\tlow mid high:\t" << low << "\t " << mid << "\t" << high << std::endl;
-
-                zeroOut(tmpArray, numElements);
-                mergeArrays(intArray, tmpArray, low, mid, high);
-                //printArray(intArray, numElements);
-                //printArray(tmpArray, numElements);
+                //zeroOut(tmpArray, numElements);         // During debug, zero out the tmp array to more easily see the bits being processed.
+                merge(intArray, tmpArray, low, mid, high);
             }
 
             // Merge any odd, not power of 2 blocks of elements
+            // Abdul Bari put similar code after the outer for loop, but I found 
+            // that bits at the end that were not covered by the number of bitsToMerge
+            // were left unsorted.
+            // If there are bits left over from merging all the bits defined by the bitsToMerge
+            // width, then they are merged here. That way all chunks of bits are always sorted.
+            // See the notes directory on interative merge sort.
             if (x < numElements) {
-                low = x - passNumber;
+                low = x - bitsToMerge;
                 mid = x - 1;
                 high = numElements - 1;
-                mergeArrays(intArray, tmpArray, low, mid, high);
-                //printArray(intArray, numElements);
-                //printArray(tmpArray, numElements);
+                merge(intArray, tmpArray, low, mid, high);
             }
 
-            //printArray(intArray, numElements);
-            //printArray(tmpArray, numElements);
         }
-        //printArray(intArray, numElements);
-        //printArray(tmpArray, numElements);
 
-        //// Merge any odd, not power of 2 blocks of elements
-        //if ((passNumber / 2) < numElements) {
-        //    mid = (passNumber / 2) - 1;
-        //    high = numElements - 1;
-        //    mergeArrays(intArray, tmpArray, 0, mid, high);
-        //    printArray(intArray, numElements);
-        //    printArray(tmpArray, numElements);
-        //}
-        //printArray(intArray, numElements);
-        //printArray(tmpArray, numElements);
+        // this is where Abdul Bari had his odd bit processing.
     }
 
     /***********************************************************/
     // Merge two lists in a single array
-    void mergeArrays(int* intArray, int* tmpArray, int low, int mid, int high) {
-        i = low;
-        j = mid + 1;
-        k = low;
+    // This merge function name overloads the merge function name used for 
+    // the recursive merge sort.
+    // This version passes a tmp array
+    void merge(int* intArray, int* tmpArray, int low, int mid, int high) {
+        i = low;        // the bottom of the bitsToMerge. Start of lower sorted list.
+        j = mid + 1;    // the middel of the bits to merge. Start of upper sorted list.
+        k = low;        // top of the bitsToMerge list.
 
         while (i <= mid && j <= high) {
-            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
-            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
+            // value in upper list > value in lower list, so move lower list value (the lower value) to tmp array
             if (intArray[i] < intArray[j]) {
                 tmpArray[k] = intArray[i];
                 k++;
                 i++;
             }
+            // value in lower list > value in upper list, so move upper list value (the lower value) to tmp array
             else {
                 tmpArray[k] = intArray[j];
                 k++;
@@ -328,31 +314,23 @@ public:
             }
         }
 
-        // end of mid to high reached, so copy the reminder of low to mid
-        // into tmpArray.
+        // end of mid to high (upper list) reached, so copy the remainder of low to mid (lower list) into tmpArray.
+        // The list is in order, so it can be directly copied.
         for (; i <= mid; i++) {
-            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
-            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             tmpArray[k] = intArray[i];
             k++;
         }
 
-        // end of low to mid reached, so copy the reminder of mid to high 
-        // into tmpArray.
+        // end of low to mid (lower list) reached, so copy the remainder of mid to high (upper list) into tmpArray.
         for (; j <= high; j++) {
-            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
-            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             tmpArray[k] = intArray[j];
             k++;
         }
 
         // copy tmpArray back into intArray
         for (i = low; i <= high; i++) {
-            //std::cout << "low mid high:\t" << low << "\t " << mid << "\t" << high << "\t";
-            //std::cout << "i j k:\t\t" << i << "\t " << j << "\t" << k << std::endl;
             intArray[i] = tmpArray[i];
         }
-
     }
 
 

@@ -81,10 +81,9 @@ int main()
 
     ac.printArray(intArray, arraySize);
 
-
     /*******************************************************/
     // Recursive Merge sort
-    // 33333333333333333333333333333333333
+    // 3333333333333333.0000000000000000000000
     // This instance is for debug and understanding
     // all cases order = O(n*log n) n = number of elements
     // space complexity = O(2n). Slightly more than 1 due to storing key.
@@ -99,7 +98,6 @@ int main()
     ac.printArray(intArrayFixed, 10);
     ac.verifyArray(intArray, 10);
 
-
     /*******************************************************/
     // Recursive Merge sort
     // 33333333333333.111111111111111111111111111111
@@ -109,7 +107,7 @@ int main()
     std::cout << "Start of recursive merge sort" << std::endl;
     for (loop = 0; loop < maxLoop; loop++) {
         ac.fillArrayRand(intArray, arraySize, maxNumberValue, loop);
-        ac.printArray(intArray, arraySize);
+        // ac.printArray(intArray, arraySize);      // unsorted array not printed.
 
         ac.mergeSort(intArray, 0, arraySize - 1);
 
@@ -119,7 +117,7 @@ int main()
 
     /*******************************************************/
     // Merge sort
-    // Fix array size and values to debug
+    // Fix array size and values to understand and debug algorithm
     // non-recursive algorithm
     // 44444444444444444.0000000000000000000000000000
    /*******************************************************/
@@ -147,8 +145,8 @@ int main()
     std::cout << "Start of iterative merge sort" << std::endl;
     for (loop = 0; loop < maxLoop; loop++) {
         ac.fillArrayRand(intArray, arraySize, maxNumberValue, loop);
-        ac.zeroOut(tmpArray, arraySize);
-        ac.printArray(intArray, arraySize);
+        //ac.zeroOut(tmpArray, arraySize);
+        //ac.printArray(intArray, arraySize);       // unsorted array not printed.
 
         ac.iterativeMergeSort(intArray, tmpArray, arraySize);
 
@@ -186,10 +184,4 @@ int main()
 
 
     //ac.printArray(intArray, arraySize);
-
-
-
-
-    /*************/
-    std::cout << "Hello World!\n";
 }
