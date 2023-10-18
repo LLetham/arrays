@@ -4,6 +4,9 @@
 #include <iostream>
 #include <time.h>       // need for ctime
 #include <cstdlib>      // need for srand
+#include <vector>       // std::vector (arrays).
+#include <algorithm>    // merge, sort
+
 #include "ArrayClass.h"
 
 
@@ -14,9 +17,14 @@ int main()
 {
     const int maxNumberValue = 10000;
     const int midNumberValue = 500;
-    const int arraySize = 21;
+    const int arraySize = 13;
     int intArray[arraySize] = { 0 };	// Initialize to 0.
-    int tmpArray[arraySize] = { 0 };    // tmp array for non-recursive merge sort.
+    int tmpArray[arraySize] = { 0 };
+    std::vector<int> v (26); // vector (array) for STL merge sort
+    std::vector<int>::iterator it, itNext;
+
+
+    int mergedArray[2 * arraySize] = { 0 };
     int tmp;
     int loop;
     const int maxLoop = 20;
@@ -153,6 +161,58 @@ int main()
         ac.printArray(intArray, arraySize);
         ac.verifyArray(intArray, arraySize);
     }
+
+    /*******************************************************/
+// Merge sort
+// Using STL classes
+// 55555555555555555555555555555555555555555555555555555555555
+// all cases order = O(n*log n) n = number of elements
+/*******************************************************/
+    std::cout << "Start of STL merge sort" << std::endl;
+    ac.fillArrayRand(intArray, arraySize, maxNumberValue, 2);
+    ac.fillArrayRand(tmpArray, arraySize, maxNumberValue, 12);
+
+    std::sort(intArray, intArray + 13);
+    std::sort(tmpArray, tmpArray + 13);
+
+    ac.printArray(intArray, arraySize);
+    ac.printArray(tmpArray, arraySize);
+
+    std::merge(intArray, intArray + 13, tmpArray, tmpArray + 13, v.begin());
+
+    //// print out results array and verify ascending order
+    //itNext = resultVector.begin();
+    //tmp = 0;
+    //std::cout << "v:\t";
+    //for (it = resultVector.begin(); it != resultVector.end(); ++it) {
+    //    itNext++;
+    //    if (*it > *itNext) tmp = 1;
+    //    std::cout << "\t" << *it;
+    //}
+    //std::cout << std::endl;
+    //if (tmp == 1) std::cout << "Error in order" << std::endl;
+
+    itNext = v.begin();
+    for (it = v.begin(); it != v.end(); ++it) {
+        if (itNext != v.end())
+            itNext++;;
+        std::cout << "error in vector order" << std::endl;
+    }
+
+    int first[] = { 5, 10, 15, 38, 25, 16, 29, 23, 9, 3, 43, 6, 27 };
+    int second[] = { 50, 40, 30, 20, 14, 31, 7, 17, 62, 48, 35, 19, 39 };
+    std::vector<int> v1(26);
+
+    std::sort(first, first + 13);
+    std::sort(second, second + 13);
+    std::merge(first, first + 13, second, second + 13, v.begin());
+
+    std::cout << "The resulting vector contains:";
+    for (std::vector<int>::iterator it1 = v1.begin(); it != v1.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+
+
 
     /*******************************************************/
     // Quick sort
